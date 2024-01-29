@@ -1,0 +1,18 @@
+<odoo>
+
+    <record id="purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_cancel']" position="before">
+                <button name="whatsapp_int"
+                        string="Share with Whatsapp"
+                        type="object" icon="fa-whatsapp" class="btn btn-primary"
+                        help="Share Vendor Name, PO No. and State of PO on Whatsapp to Current Vendor"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
