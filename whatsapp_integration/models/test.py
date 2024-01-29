@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-
+from odoo.exceptions import ValidationError
 
 class PurchaseOrderInherit(models.Model):
     _inherit = 'purchase.order'
@@ -9,12 +9,15 @@ class PurchaseOrderInherit(models.Model):
         state = dict(self._fields['state'].selection).get(self.state)
         print('string value',state)
         x = self.env.ref('purchase.report_purchase_quotation').report_action(self)
-        msg = 'Hi %s your PO No. is "%s" Your PO is in "%s" State' % (self.partner_id.name, self.name, state)
-        whatsapp_api_url = 'https://web.whatsapp.com/send?phone=%s&text=%s' % (self.partner_id.phone,msg)
+        if not self.partner_id.phone:
+            raise ValidationError('Vendor Phone No. is Missing')
+        else:
+            msg = 'Hi %s your PO No. is "%s" Your PO is in "%s" State' % (self.partner_id.name, self.name, state)
+            whatsapp_api_url = 'https://web.whatsapp.com/send?phone=%s&text=%s' % (self.partner_id.phone,msg)
 
-        return {
-            'type': 'ir.actions.act_url',
-            'target': 'current',
-            'url': whatsapp_api_url,
+            return {
+                'type': 'ir.actions.act_url',
+                'target': 'current',
+                'url': whatsapp_api_url,
 
-        }
+            }
